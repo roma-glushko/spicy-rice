@@ -5,6 +5,7 @@
 Spicy Rice is designed to be:
 
 - zero-configuration
+- cross-platform
 - easy to setup and use
 - no backend/no database/no docker
 - browser-based
