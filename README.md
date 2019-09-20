@@ -5,6 +5,7 @@
 Spicy Rice is designed to be:
 
 - zero-configuration
+- cross-platform
 - easy to setup and use
 - no backend/no database/no docker
 - browser-based
@@ -12,7 +13,7 @@ Spicy Rice is designed to be:
 Spicy Rice should be a quick and free alternative for nooby/hobby projects where it's not yet reasonable to buy and use professional tools like Prodigy.
 There are other open source NER annotators, but Spicy Rice is different, it's going to be extreamly easy to get started. 
 
-Everything that is needed from you is:
+Everything that is needed from you:
 
 - modern browser
 - ability to run regular React/Redux project
