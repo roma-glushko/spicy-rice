@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import {
   addNewEntity,
   removeEntity,
+  selectEntityCategory,
 } from '../../modules/annotator'
 
 import '../../component/annotator.css';
@@ -16,78 +17,6 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 
 import Highlightable from '../../component/highlightable/Highlightable'
-
-// todo: the rest of labels are there https://spacy.io/api/annotation#named-entities
-const labels = [
-  {
-    'label': 'Person',
-    'description': 'People, including fictional.',
-  },
-  {
-    'label': 'NORP',
-    'description': 'Nationalities or religious or political groups.',
-  },
-  {
-    'label': 'FAC',
-    'description': 'Buildings, airports, highways, bridges, etc.',
-  },
-  {
-    'label': 'ORG',
-    'description': 'Companies, agencies, institutions, etc.',
-  },
-  {
-    'label': 'GPE',
-    'description': 'Countries, cities, states.',
-  },
-  {
-    'label': 'LOC',
-    'description': 'Non-GPE locations, mountain ranges, bodies of water.',
-  },
-  {
-    'label': 'Product',
-    'description': 'Objects, vehicles, foods, etc. (Not services.)',
-  },
-  {
-    'label': 'Event',
-    'description': 'Named hurricanes, battles, wars, sports events, etc.',
-  },
-  {
-    'label': 'Work_of_art',
-    'description': 'Titles of books, songs, etc.',
-  },
-  {
-    'label': 'Language',
-    'description': 'Any named language.',
-  },
-  {
-    'label': 'Date',
-    'description': 'Absolute or relative dates or periods.',
-  },
-  {
-    'label': 'Time',
-    'description': 'Times smaller than a day.',
-  },
-  {
-    'label': 'Percent',
-    'description': 'Percentage, including ”%“.',
-  },
-  {
-    'label': 'Money',
-    'description': 'Monetary values, including unit.',
-  },
-  {
-    'label': 'Quantity',
-    'description': 'Measurements, as of weight or distance.',
-  },
-  {
-    'label': 'Ordinal',
-    'description': '“first”, “second”, etc.',
-  },
-  {
-    'label': 'Cardinal',
-    'description': 'Numerals that do not fall under another type.',
-  },
-]
 
 class Home extends Component {
 
@@ -108,18 +37,20 @@ class Home extends Component {
   }
 
   rangeRenderer = (letterGroup, range) => {
+    const { currentEntityCategory } = this.props
+
     return (
       <span className="entity-selection-container">
         {letterGroup}
         <span className="entity-selection-info">
-          <span className="entity-label">Product</span>
+          <span className="entity-label">{currentEntityCategory}</span>
           <span className="remove-entity-selection" onClick={() => {this.removeEntity(range)}}>×</span>
         </span>
       </span>)
   }
 
   render = () => {
-    const { text, entities } = this.props
+    const { text, currentEntityCategory, entityCategories, entities, selectEntityCategory } = this.props
 
     return (
       <Container className="annotator">
@@ -127,7 +58,7 @@ class Home extends Component {
           <Col xs={12} md={{"span": 8, "offset": 2}}>
             <div className="entity-container">
               {
-                labels && labels.length > 0 && labels.map((({label, description}) => (
+                entityCategories && entityCategories.length > 0 && entityCategories.map((({label, description}) => (
                   <OverlayTrigger
                     key={`overlay-trigger-label-${label}`}
                     placement="bottom"
@@ -137,7 +68,7 @@ class Home extends Component {
                       </Tooltip>
                     }
                   >
-                    <span className="entity">{label}</span>
+                    <span onClick={() => {selectEntityCategory(label)}} className={`entity ${currentEntityCategory == label ? 'selected' : ''}`}>{label}</span>
                   </OverlayTrigger>
                 )
               ))}
@@ -161,6 +92,8 @@ class Home extends Component {
 
 const mapStateToProps = ({ annotator }) => ({
   text: annotator.text,
+  currentEntityCategory: annotator.currentEntityCategory,
+  entityCategories: annotator.entityCategories,
   entities: annotator.entities,
   isAddingEntity: annotator.isAddingEntity,
   isRemovingEntity: annotator.isRemovingEntity,
@@ -171,6 +104,7 @@ const mapDispatchToProps = dispatch =>
     {
       addNewEntity,
       removeEntity,
+      selectEntityCategory,
       changePage: () => push('/about-us'),
     },
     dispatch

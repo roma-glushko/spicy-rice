@@ -17,6 +17,12 @@
     user-select: none;
 }
 
+.entity.selected {
+    background-color: black;
+    color: white;
+    font-weight: 700;
+}
+
 .text-container {
     border: 1px solid #333;
     border-top: none;
