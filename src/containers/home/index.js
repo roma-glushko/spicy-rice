@@ -12,7 +12,6 @@ import '../../component/annotator.css';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Badge from 'react-bootstrap/Badge'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 
@@ -53,16 +52,40 @@ const labels = [
     'description': 'Named hurricanes, battles, wars, sports events, etc.',
   },
   {
-    'label': 'WORK_OF_ART',
+    'label': 'Work_of_art',
     'description': 'Titles of books, songs, etc.',
   },
   {
-    'label': 'LANGUAGE',
+    'label': 'Language',
     'description': 'Any named language.',
   },
   {
-    'label': 'DATE',
+    'label': 'Date',
     'description': 'Absolute or relative dates or periods.',
+  },
+  {
+    'label': 'Time',
+    'description': 'Times smaller than a day.',
+  },
+  {
+    'label': 'Percent',
+    'description': 'Percentage, including ”%“.',
+  },
+  {
+    'label': 'Money',
+    'description': 'Monetary values, including unit.',
+  },
+  {
+    'label': 'Quantity',
+    'description': 'Measurements, as of weight or distance.',
+  },
+  {
+    'label': 'Ordinal',
+    'description': '“first”, “second”, etc.',
+  },
+  {
+    'label': 'Cardinal',
+    'description': 'Numerals that do not fall under another type.',
   },
 ]
 
@@ -80,12 +103,19 @@ class Home extends Component {
   
   removeEntity = (entity) => {
     const { removeEntity } = this.props
-    
+
     removeEntity(entity)
   }
 
-  rangeRenderer = (letterGroup, range, textCharIndex) => {
-    return (<span className="selected-entity">{letterGroup}<span className="remove-selected-entity" onClick={() => {this.removeEntity(range)}}>❌</span></span>)
+  rangeRenderer = (letterGroup, range) => {
+    return (
+      <span className="entity-selection-container">
+        {letterGroup}
+        <span className="entity-selection-info">
+          <span className="entity-label">Product</span>
+          <span className="remove-entity-selection" onClick={() => {this.removeEntity(range)}}>×</span>
+        </span>
+      </span>)
   }
 
   render = () => {
@@ -94,8 +124,8 @@ class Home extends Component {
     return (
       <Container className="annotator">
         <Row>
-          <Col xs={12} md={12}>
-            <div>
+          <Col xs={12} md={{"span": 8, "offset": 2}}>
+            <div className="entity-container">
               {
                 labels && labels.length > 0 && labels.map((({label, description}) => (
                   <OverlayTrigger
@@ -107,20 +137,21 @@ class Home extends Component {
                       </Tooltip>
                     }
                   >
-                    <Badge variant="primary">{label}</Badge>
+                    <span className="entity">{label}</span>
                   </OverlayTrigger>
                 )
               ))}
             </div>
-            <Highlightable ranges={entities}
-              enabled={true}
-              onTextHighlighted={this.onTextHighlightedCallback}
-              id="highlightable"
-              onMouseOverHighlightedWord={this.onMouseOverHighlightedWordCallback}
-              rangeRenderer={this.rangeRenderer}
-              text={text}
-              className="annotator-area"
-            />
+            <div className="text-container">
+              <Highlightable ranges={entities}
+                enabled={true}
+                onTextHighlighted={this.onTextHighlightedCallback}
+                id="highlightable"
+                onMouseOverHighlightedWord={this.onMouseOverHighlightedWordCallback}
+                rangeRenderer={this.rangeRenderer}
+                text={text}
+              />
+            </div>
           </Col>
         </Row>
       </Container>

@@ -1,34 +1,65 @@
-.badge {
-    padding: 10px;
-    margin: 5px;
-    -webkit-user-select: none;
-    /* Chrome all / Safari all */
-    -moz-user-select: none;
-    /* Firefox all             */
-    -ms-user-select: none;
-    /* IE 10+                  */
-    user-select: none;
-    cursor: pointer;
+.entity-container {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid #333;
+    padding: 20px 10px
 }
 
-.selected-entity {
-    background-color: blue;
-    color: white;
+.entity {
+    border: 1px solid #333;
+    cursor: pointer;
+    font-size: 14px;
     padding: 5px;
-}
-
-.remove-selected-entity {
-    cursor: pointer;
-    margin-left: 5px;
+    margin: 5px;
     -webkit-user-select: none;
-    /* Chrome all / Safari all */
     -moz-user-select: none;
-    /* Firefox all             */
     -ms-user-select: none;
-    /* IE 10+                  */
     user-select: none;
 }
 
-.annotator-area {
-    margin: 5px;
+.text-container {
+    border: 1px solid #333;
+    border-top: none;
+    padding: 30px 20px;
+    line-height: 2;
+}
+
+.entity-selection-container {
+    background-color: #DDEBF7;
+    color: black;
+    font-weight: 700;
+    padding: 5px 8px;
+    margin: 0 3px;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.entity-selection-info {
+    margin-left: 3px;
+}
+
+.entity-label {
+    font-size: 10px;
+    font-weight: normal;
+}
+
+.remove-entity-selection {
+    color: white;
+    cursor: pointer;
+    background-color: black;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 19px;
+    position: absolute;
+    top: -10px;
+    text-align: center;
+    left: -10px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
