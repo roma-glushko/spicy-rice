@@ -1,0 +1,34 @@
+.badge {
+    padding: 10px;
+    margin: 5px;
+    -webkit-user-select: none;
+    /* Chrome all / Safari all */
+    -moz-user-select: none;
+    /* Firefox all             */
+    -ms-user-select: none;
+    /* IE 10+                  */
+    user-select: none;
+    cursor: pointer;
+}
+
+.selected-entity {
+    background-color: blue;
+    color: white;
+    padding: 5px;
+}
+
+.remove-selected-entity {
+    cursor: pointer;
+    margin-left: 5px;
+    -webkit-user-select: none;
+    /* Chrome all / Safari all */
+    -moz-user-select: none;
+    /* Firefox all             */
+    -ms-user-select: none;
+    /* IE 10+                  */
+    user-select: none;
+}
+
+.annotator-area {
+    margin: 5px;
+}
