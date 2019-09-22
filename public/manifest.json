@@ -2,7 +2,7 @@
     "short_name": "Spicy Rice!",
     "name": "Spicy Rice - a text annotation tool",
     "icons": [
-        { "src": "./favicon/favicon.png", "sizes": "250x252", "type": "image/png" },
+        { "src": "./favicon/favicon.png", "sizes": "250x252", "type": "image/png" }
     ],
     "start_url": "./index.html",
     "display": "standalone",

@@ -1,111 +1,81 @@
 import React, { Component } from 'react'
-import { push } from 'connected-react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import {
-  addNewEntity,
-  removeEntity,
-  selectEntityCategory,
-} from '../../modules/annotator'
 
-import '../../component/annotator.css';
+import './home.css';
+import NewProjectForm from '../../component/new-project-form';
+import ProjectGridItem from '../../component/project-grid-item';
 
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-import Tooltip from 'react-bootstrap/Tooltip'
-
-import Highlightable from '../../component/highlightable/Highlightable'
+import Jumbotron from 'react-bootstrap/Jumbotron'
+import Button from 'react-bootstrap/Button'
+import Badge from 'react-bootstrap/Badge'
+import Image from 'react-bootstrap/Image'
 
 class Home extends Component {
 
-  onTextHighlightedCallback = (newRange) => {
-    const { addNewEntity } = this.props
-    
-    addNewEntity(newRange)
-  }
-  
-  onMouseOverHighlightedWordCallback = (e) => {
-    console.log(e)
-  }
-  
-  removeEntity = (entity) => {
-    const { removeEntity } = this.props
-
-    removeEntity(entity)
-  }
-
-  rangeRenderer = (letterGroup, range) => {
-    const { currentEntityCategory } = this.props
-
-    return (
-      <span className="entity-selection-container">
-        {letterGroup}
-        <span className="entity-selection-info">
-          <span className="entity-label">{currentEntityCategory}</span>
-          <span className="remove-entity-selection" onClick={() => {this.removeEntity(range)}}>×</span>
-        </span>
-      </span>)
-  }
-
   render = () => {
-    const { text, currentEntityCategory, entityCategories, entities, selectEntityCategory } = this.props
+    const { projects } = this.props;
+
+    const projectCount = projects.length;
+    const projectToShow = projects.slice(-2) // last two added projects
 
     return (
-      <Container className="annotator">
-        <Row>
-          <Col xs={12} md={{"span": 8, "offset": 2}}>
-            <div className="entity-container">
-              {
-                entityCategories && entityCategories.length > 0 && entityCategories.map((({label, description}) => (
-                  <OverlayTrigger
-                    key={`overlay-trigger-label-${label}`}
-                    placement="bottom"
-                    overlay={
-                      <Tooltip id={`tooltip-label-${label}`}>
-                        {description}
-                      </Tooltip>
-                    }
-                  >
-                    <span onClick={() => {selectEntityCategory(label)}} className={`entity ${currentEntityCategory == label ? 'selected' : ''}`}>{label}</span>
-                  </OverlayTrigger>
-                )
-              ))}
-            </div>
-            <div className="text-container">
-              <Highlightable ranges={entities}
-                enabled={true}
-                onTextHighlighted={this.onTextHighlightedCallback}
-                id="highlightable"
-                onMouseOverHighlightedWord={this.onMouseOverHighlightedWordCallback}
-                rangeRenderer={this.rangeRenderer}
-                text={text}
-              />
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      <div>
+        <Container className="manage-projects-jumbotron-container">
+          <Row>
+            <Col>
+              <Jumbotron>
+                <Image className="jumbotron-logo" src="/favicon/favicon.png" roundedCircle />
+                <h1>Spicy Rice!</h1>
+                <p className="jumbotron-description">An open source text annotator (NER) for your tiny/hobby NLP projects.</p>
+                <div className="jumbotron-bagde-container">
+                  <Badge variant="info">zero-configuration</Badge>
+                  <Badge variant="info">cross-platform</Badge>
+                  <Badge variant="info">no-backend</Badge>
+                </div>
+              </Jumbotron>
+            </Col>
+          </Row>
+        </Container>
+        <Container className="row-divided manage-projects-container">
+          <Row>
+            <Col xs={12} lg={6} className="column-one">
+              <h2>New Project</h2>
+              <NewProjectForm />
+            </Col>
+            <div className="vertical-divider">or</div>
+            <Col xs={12} lg={6} className="column-two">
+              <h2>Existing Projects</h2>
+              <div className="project-grid-container">
+                {projectToShow && projectToShow.map((project) => (
+                  <ProjectGridItem project={project} />
+                ))}
+                {
+                  projectCount > 2 && (
+                    <div className="all-projects-container">
+                      <Button variant="info">All Projects</Button>                    
+                    </div>
+                  )
+                }
+              </div>
+            </Col>
+          </Row> 
+        </Container>
+      </div>
     )
   }
 }
 
-const mapStateToProps = ({ annotator }) => ({
-  text: annotator.text,
-  currentEntityCategory: annotator.currentEntityCategory,
-  entityCategories: annotator.entityCategories,
-  entities: annotator.entities,
-  isAddingEntity: annotator.isAddingEntity,
-  isRemovingEntity: annotator.isRemovingEntity,
+const mapStateToProps = ({ project }) => ({
+  projects: project.projects,
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      addNewEntity,
-      removeEntity,
-      selectEntityCategory,
-      changePage: () => push('/about-us'),
     },
     dispatch
   )

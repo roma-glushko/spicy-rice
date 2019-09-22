@@ -1,0 +1,16 @@
+html,
+body,
+#root,
+.app-container,
+.page-container {
+    height: 100%
+}
+
+.page-project-annotate .navigation {
+    position: absolute;
+    width: 100%;
+}
+
+.form-control {
+    border-radius: initial;
+}

@@ -116,7 +116,7 @@ export default (state = initialState, action) => {
         ...state,
         isRemovingEntity: false,
         entities: state.entities.filter(entity =>
-          entity.data.id == action.entity.data.id && 
+          entity.data.id === action.entity.data.id && 
           entity.text !== action.entity.text &&
           entity.start !== action.entity.start && 
           entity.end !== action.entity.end

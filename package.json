@@ -30,7 +30,8 @@
         "redux": "4.0.4",
         "redux-thunk": "2.3.0",
         "sanitize.css": "7.0.3",
-        "serve": "10.1.2"
+        "serve": "10.1.2",
+        "uuid": "^3.3.3"
     },
     "browserslist": [
         ">0.2%",
