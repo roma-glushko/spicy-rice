@@ -1,4 +1,13 @@
 
+import Dexie from 'dexie'
+import db, { DB_NAME } from '../db'
+
+export const SETUP_DEMO_DATA_REQUESTED = 'project/SETUP_DEMO_DATA_REQUESTED'
+export const SETUP_DEMO_DATA = 'project/SETUP_DEMO_DATA'
+export const SETUP_NO_DEMO_DATA = 'project/SETUP_NO_DEMO_DATA'
+export const SETUP_DEMO_DATA_ERROR = 'project/SETUP_DEMO_DATA_ERROR'
+export const LOAD_PROJECTS_REQUESTED = 'project/LOAD_PROJECTS_REQUESTED'
+export const LOAD_PROJECTS = 'project/LOAD_PROJECTS'
 export const ADD_NEW_PROJECT_REQUESTED = 'project/ADD_NEW_PROJECT_REQUESTED'
 export const ADD_NEW_PROJECT = 'project/ADD_NEW_PROJECT'
 
@@ -89,15 +98,34 @@ const initialState = {
       ],
     }
   ],
+  isSettingDemoData: false,
+  wasDemoDataAlreadySetup: false,
+  wasDemoDataSetup: false,
+  isDemoDataSetupError: false,
+  demoDataSetupError: "",
+  isLoadingProject: false,
   isAddingProject: false,
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case LOAD_PROJECTS_REQUESTED:
+      return {
+        ...state,
+        isLoadingProject: true,
+      }
+
+    case LOAD_PROJECTS:
+      return {
+        ...state,
+        isLoadingProject: false,
+        projects: action.projects
+      }
+
     case ADD_NEW_PROJECT_REQUESTED:
       return {
         ...state,
-        isAddingProject: true,
+        isLoadingProject: true,
       }
 
     case ADD_NEW_PROJECT:
@@ -110,9 +138,90 @@ export default (state = initialState, action) => {
         ],
       }
 
+    case SETUP_DEMO_DATA_REQUESTED:
+        return {
+          ...state,
+          isSettingDemoData: true,
+        }
+
+    case SETUP_DEMO_DATA:
+        return {
+          ...state,
+          isSettingDemoData: false,
+          wasDemoDataSetup: true
+        }
+
+    case SETUP_NO_DEMO_DATA:
+        return {
+          ...state,
+          isSettingDemoData: false,
+          wasDemoDataAlreadySetup: true
+        }
+
+    case SETUP_DEMO_DATA_ERROR:
+        return {
+          ...state,
+          isSettingDemoData: false,
+          isDemoDataSetupError: true,
+          demoDataSetupError: action.errorMessage
+        }
+
     default:
       return state
   }
+}
+
+export function setupDemoData() {
+  return (dispatch) => {
+    dispatch({
+      type: SETUP_DEMO_DATA_REQUESTED
+    })
+
+    Dexie.exists(DB_NAME).then((exists) => {
+      if (exists) {
+        dispatch({
+          type: SETUP_NO_DEMO_DATA,
+        });
+
+        dispatch(loadProjects())
+
+        return
+      }
+
+      // setup demo data
+
+      db().transaction('rw', db().projects, function () {
+        db().projects.bulkAdd(initialState.projects);
+      }).then(() => {
+        dispatch({
+          type: SETUP_DEMO_DATA,
+        });
+      }).catch(ex => {
+        dispatch({
+          type: SETUP_DEMO_DATA_ERROR,
+          errorMessage: ex.message
+        });
+      });
+      
+    });
+  };
+}
+
+export function loadProjects() {
+  return (dispatch) => {
+    dispatch({
+      type: LOAD_PROJECTS_REQUESTED
+    })
+
+    db().table('projects')
+      .toArray()
+      .then((projects) => {
+        dispatch({
+          type: LOAD_PROJECTS,
+          projects: projects,
+        });
+      });
+  };
 }
 
 export const addNewProject = (projectData) => {

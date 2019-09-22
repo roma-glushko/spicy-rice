@@ -1,18 +1,23 @@
 import React, { Component }  from 'react'
 import { Route } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
+import {
+  setupDemoData,
+} from '../../modules/project'
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import Breadcrumb from 'react-bootstrap/Breadcrumb'
+
+import './global.css';
 import Home from '../home'
 import Projects from '../projects'
 import ProjectView from '../project-view'
 import AnnotateProject from '../annotate-project'
 import About from '../about'
-
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './global.css';
 
 class App extends Component {
 
@@ -28,6 +33,12 @@ class App extends Component {
     }
 
     return 'page' + currentPath.split("/").join("-")
+  }
+
+  componentDidMount() {
+    const { setupDemoData } = this.props
+
+    setupDemoData()
   }
 
   render = () => {
@@ -71,6 +82,15 @@ const mapStateToProps = ({ router }) => ({
   currentPath: router.location.pathname,
 })
 
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      setupDemoData
+    },
+    dispatch
+)
+
 export default connect(
   mapStateToProps,
+  mapDispatchToProps,
 )(App)
