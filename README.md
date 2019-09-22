@@ -2,13 +2,17 @@
 
 🍚 Spice Rice is an open source named entity annotator for your tiny/hobby NLP projects.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/roma-glushko/spicy-rice/master/docs/homepage-sample.png" />
+</p>
+
+---
+
 Spicy Rice is designed to be:
 
-- zero-configuration
-- cross-platform
-- easy to setup and use
+- zero-configuration / easy to setup and use
+- cross-platform / browser-based
 - no backend/no database/no docker
-- browser-based
 
 Spicy Rice should be a quick and free alternative for nooby/hobby projects where it's not yet reasonable to buy and use professional tools like Prodigy.
 There are other open source NER annotators, but Spicy Rice is different, it's going to be extreamly easy to get started. 
