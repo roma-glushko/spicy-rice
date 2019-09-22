@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Home from '../home'
 import Projects from '../projects'
+import ProjectView from '../project-view'
 import AnnotateProject from '../annotate-project'
 import About from '../about'
 
@@ -57,8 +58,8 @@ class App extends Component {
         <main className="page-container">
           <Route exact path="/" component={Home} />
           <Route exact path="/projects" component={Projects} />
-          <Route path="/project/:projectId" component={Projects} />
-          <Route exact path="/project/annotate" component={AnnotateProject} />
+          <Route exact path="/project/:projectId?/view" component={ProjectView} />
+          <Route exact path="/project/:projectId?/annotate" component={AnnotateProject} />
           <Route exact path="/about-us" component={About} />
         </main>
       </div>
