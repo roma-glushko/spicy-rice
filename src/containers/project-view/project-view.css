@@ -1,0 +1,8 @@
+.projects-container h1 {
+    text-align: center;
+}
+
+.project-tabs {
+    justify-content: center;
+    margin-bottom: 1rem;
+}

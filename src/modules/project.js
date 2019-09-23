@@ -2,9 +2,7 @@
 import Dexie from 'dexie'
 import db, { DB_NAME } from '../db'
 
-export const SETUP_DEMO_DATA_REQUESTED = 'project/SETUP_DEMO_DATA_REQUESTED'
 export const SETUP_DEMO_DATA = 'project/SETUP_DEMO_DATA'
-export const SETUP_NO_DEMO_DATA = 'project/SETUP_NO_DEMO_DATA'
 export const SETUP_DEMO_DATA_ERROR = 'project/SETUP_DEMO_DATA_ERROR'
 export const LOAD_PROJECTS_REQUESTED = 'project/LOAD_PROJECTS_REQUESTED'
 export const LOAD_PROJECTS = 'project/LOAD_PROJECTS'
@@ -98,12 +96,11 @@ const initialState = {
       ],
     }
   ],
-  isSettingDemoData: false,
-  wasDemoDataAlreadySetup: false,
   wasDemoDataSetup: false,
   isDemoDataSetupError: false,
   demoDataSetupError: "",
-  isLoadingProject: false,
+  isLoadingProjects: false,
+  areProjectsLoaded: false,
   isAddingProject: false,
 }
 
@@ -112,13 +109,14 @@ export default (state = initialState, action) => {
     case LOAD_PROJECTS_REQUESTED:
       return {
         ...state,
-        isLoadingProject: true,
+        isLoadingProjects: true,
       }
 
     case LOAD_PROJECTS:
       return {
         ...state,
-        isLoadingProject: false,
+        isLoadingProjects: false,
+        areProjectsLoaded: true,
         projects: action.projects
       }
 
@@ -138,30 +136,15 @@ export default (state = initialState, action) => {
         ],
       }
 
-    case SETUP_DEMO_DATA_REQUESTED:
-        return {
-          ...state,
-          isSettingDemoData: true,
-        }
-
     case SETUP_DEMO_DATA:
         return {
           ...state,
-          isSettingDemoData: false,
           wasDemoDataSetup: true
-        }
-
-    case SETUP_NO_DEMO_DATA:
-        return {
-          ...state,
-          isSettingDemoData: false,
-          wasDemoDataAlreadySetup: true
         }
 
     case SETUP_DEMO_DATA_ERROR:
         return {
           ...state,
-          isSettingDemoData: false,
           isDemoDataSetupError: true,
           demoDataSetupError: action.errorMessage
         }
@@ -174,16 +157,19 @@ export default (state = initialState, action) => {
 export function setupDemoData() {
   return (dispatch) => {
     dispatch({
-      type: SETUP_DEMO_DATA_REQUESTED
+      type: LOAD_PROJECTS_REQUESTED
     })
 
     Dexie.exists(DB_NAME).then((exists) => {
       if (exists) {
-        dispatch({
-          type: SETUP_NO_DEMO_DATA,
-        });
-
-        dispatch(loadProjects())
+        db().table('projects')
+          .toArray()
+          .then((projects) => {
+            dispatch({
+              type: LOAD_PROJECTS,
+              projects: projects,
+            });
+          });
 
         return
       }
@@ -193,6 +179,11 @@ export function setupDemoData() {
       db().transaction('rw', db().projects, function () {
         db().projects.bulkAdd(initialState.projects);
       }).then(() => {
+        dispatch({
+          type: LOAD_PROJECTS,
+          projects: initialState.projects,
+        });
+
         dispatch({
           type: SETUP_DEMO_DATA,
         });
