@@ -230,15 +230,21 @@ export const addNewProject = (projectData) => {
       type: ADD_NEW_PROJECT_REQUESTED
     })
 
-    dispatch({
-      type: ADD_NEW_PROJECT,
-      project: {
-        id: projectData.id,
-        name: projectData.name,
-        description: projectData.description,
-        entityCategories: defaultEntityCategories,
-        sentences: [],
-      },
+    const newProject = {
+      id: projectData.id,
+      name: projectData.name,
+      description: projectData.description,
+      entityCategories: defaultEntityCategories,
+      sentences: [],
+    }
+
+    db().table('projects')
+    .add(newProject)
+    .then((id) => {
+      dispatch({
+        type: ADD_NEW_PROJECT,
+        project: newProject,
+      })
     })
   }
 }
