@@ -85,7 +85,7 @@ class ProjectView extends Component {
                       <Tab.Pane eventKey="annotation">
                           <Container>
                           <Row>
-                            <Col><ProgressBar now={60} /></Col>
+                            <Col className="project-annotation-progress-container"><ProgressBar className="project-annotation-progress" now={60} /></Col>
                           </Row>
                           <Row>
                             <Col lg={4}>

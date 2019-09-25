@@ -1,8 +1,21 @@
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    background-color: #17a2b8;
+}
+
+.progress-bar {
+    background-color: #17a2b8;
+}
+
 .projects-container h1 {
     text-align: center;
 }
 
 .project-tabs {
     justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.project-annotation-progress-container {
     margin-bottom: 1rem;
 }
